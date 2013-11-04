@@ -1,0 +1,37 @@
+
+# Diagnosmeddelanden frÂn kompilatorn (g++) filtreras av gccfilter.
+CCC = gccfilter -c -a g++
+
+# Kompilatorflaggor, l‰gg till '-g' om kompilering fˆr avlusning ska gˆras.
+CCFLAGS += -std=c++11 -Wpedantic -Wall -Wextra -Werror
+
+# L‰nkflaggor - Fix fˆr att lˆsa lokala problem med C++ l‰nkbibliotek.
+LDFLAGS  += -L/sw/gcc-$(GCC4_V)/lib -static-libstdc++
+
+# Objektkodsmoduler som ingÂr i den kompletta kalkylatorn.
+OBJECTS = test.o Variable_table.o
+# HuvudmÂl - skapas med kommandot 'make' eller 'make kalkylator'.
+test: $(OBJECTS) makefile
+	$(CCC) $(CCFLAGS) $(LDFLAGS) -o test $(OBJECTS)
+
+# DelmÂl (flaggan -c avbryter innan l‰nkning, objektkodsfil erhÂlls)
+test: test.cc
+	$(CCC)  $(CCFLAGS) -c test.cc
+	
+Variable_table.o: Variable_table.h Variable_table.cc
+	$(CCC)  $(CCFLAGS) -c Variable_table.cc
+	
+	# 'make clean' tar bort objektkodsfiler och 'core' (minnesdump).
+clean:
+	@ \rm -rf *.o *.gch core
+
+# 'make zap' tar ‰ven bort det kˆrbara programmet och reservkopior (filer
+# som slutar med tecknet '~').
+zap: clean
+	@ \rm -rf kalkylator *~
+
+# Se upp vid eventuell ‰ndring, '*' fÂr absolut inte finnas fˆr sig!!!
+#
+# '@' medfˆr att kommandot inte skrivs ut pÂ sk‰rmen dÂ det utfˆrs av make.
+# 'rm' ‰r ett alias fˆr 'rm -i' pÂ IDA:s system, '\rm' inneb‰r att "original-
+# versionen", utan flaggan '-i', anv‰nds. 

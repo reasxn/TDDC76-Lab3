@@ -1,0 +1,92 @@
+Kommer behöva göra ändringar direkt i de givna klasserna. 
+
+Majoriteten av arbetet ligger i expression tree. Börja där.
+50% av tiden. 
+
+(5 + 5)x7 , <-- infix uttryck. kommer att konverteras till postfix
+
+5 5 + 7 x , utvärderas från vänster till höger. 
+Postfix enklare speciellt för datorn, behövs inte paranteser t.ex.
+5 + 5 x 7 =  5  7 x 5 + 
+
+Uttrycksträd. Ish rekursiv.
+
+	7
+x 		5
+	+
+		5
+		
+Om vi måste skriva alla skrivsätt blir det väldigt mycket kod, så vi ska utnyttja arv, 
+aka polymorfi för att minska antalet upprepad klasskod. 
+
+						Basklass
+			komplexklass1		komplexklass2
+			
+Ex. getpostfix() är en funktion alla räknesätt kommer behöva, perfekt sak att lägga i 
+basklassen. 
+
+Jonas rekommenderar. Börja med funktionen Evaluate. Varje klass kommer behöva sin egen
+evaluate(). Evaluate måste gå att göra på vilken som helst typ. 
+
+Nod strukturer är aktuella. 
+
+För att kunna uppnå den giva strukturen med evaluate. Måste pekarna vara av bastypen. 
+Därför måste basklassen innehålla basklassen, men vi vill inte säga vad den ska göra.
+Skjuta definitionen på framtiden. Nyckelordet Virtual kommer in. 
+
+Virtual doubel evaluate(); <-- Virtual säger att vi kanske kommer att skriva över denna. 
+kommer alltid vara double, men vi kan ändra vad som händer innanför måsvingarna.
+
+lite kod: 
+class expression_tree{
+public: 
+	virtual double evaluate(...) = 0;	//pure virtual (= 0) , MÅSTE finnas längre fram. 
+	
+}
+
+class mult : public expression_tree{
+public: 
+	expression_tree *left, *right;
+	evaluate(){
+	return left->evaluate * right->evaluate;
+	}
+}
+
+
+OBS! Man kan aldrig ärva konstruktorer. Men destuktorn kan ärvas, men ej per automatik. 
+Men om man skriver virtual på destruktorn innebär att destruktorn kan köras i barnklasser.
+Om man använder arv, skapa alltid en virtual destruktor. Så att alla underklasser kedjar
+destruktorerna ovan. God sed, definera dess destruktor som virtual då den ärvs hela vägen
+ned.
+
+class plus : public operator{
+public:
+plus(expression_tree * left, 
+		expression_tree * right):operator(left,right){}
+override double evaluate ...   // override berättar tydligare till kompilatorn vad vi tänker oss. 
+
+
+}
+
+
+Heltal SKA lagras som heltal för att undvika avrundningsfel. 
+
+Unika typer är:   7 heltal 	7,4 flyttal, x variabel. 
+
+x = 5;  x = 7 * 5,  x + 7 , etc.
+
+Måste kunna representera = operatorn i uttrycksträdet. 
+Måste ha variabel till vänster och något annat till höger. Kommer inte bara att beräkna
+höger sidan utan kommer också sätta värdet till variabeln och returnera variabeln. 
+
+setvalue och getvalue till variabler. G del. 
+
+Konverteringar åt "fel håll":
+
+variable* temp = dynamic_cast<variable*>(left);
+om denna konv misslyckades är temp en nullptr. 
+
+och nu har vi tillgång till setvalue.
+
+Protected: arvklasser se protected som public. Men allt annat ser protected som private.
+public kommer resultera i public i arvsklasserna likaså för private.
