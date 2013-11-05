@@ -49,16 +49,27 @@ Expression::Expression(const Expression& other){
  */
 
 Expression::Expression(const Expression&& other){
-  this->topnode = other.topnode->clone();
+  swap(other);										//Modified, using swap instead
+}
+
+Expression& Expression::operator=(Expression&& other)   //Added
+{
+	swap(other);
+	return *this;
 }
 
 Expression& Expression::operator=(const Expression& other){
+  if(this == &other){
+  	return *this;
+  }
   this->topnode = other.topnode->clone();
   return *this;
 }
 
 void Expression::clear(){
-  delete this;
+  delete topnode;
+  topnode = nullptr;	//Deleted the object itself, now it deletes the topnode ptr, then
+  						//sets that value to nullptr.
 }
 
 /*
@@ -67,14 +78,14 @@ void Expression::clear(){
 std::string Expression::get_postfix() const
 {
   if(empty()){
-    return "";
+    return "Empty expression";
   }
-  return topnode->get_postfix();  // ATT GÖRA!
+  return topnode->get_postfix();  
 }
 
 std::string Expression::get_infix() const {
   if(empty()){
-    return "";
+    return "Empty expression";
   }
   return topnode->get_infix();
 }
@@ -87,7 +98,7 @@ bool Expression::empty() const
   if(topnode == nullptr){
     return true;
   }
-  return false;// ATT GÖRA!
+  return false;
 }
 
 /*

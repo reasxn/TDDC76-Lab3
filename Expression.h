@@ -30,7 +30,7 @@ class Expression
 {
  public:
   // OBSERVERA: DETTA ÄR ENDAST KODSKELETT - MODIFIERA OCH KOMPLETTERA!
-  class Expression_Tree *topnode = nullptr;
+  
   Variable_Table *vtab = nullptr;
   Expression(class Expression_Tree*);
   Expression() = default;
@@ -40,15 +40,17 @@ class Expression
   Expression(const Expression&&); 	//Movesemantics
    
   Expression& operator=(const Expression&);	//Assignment operator
+  Expression& operator=(const Expression&&); //The 5th of the 5th that was missing.  <- Ska skrivas
    
-   
-  void 		clear();
+  void 		  clear();
   long double evaluate(Variable_Table&) const;
   std::string get_postfix() const;
   std::string get_infix() const;
   bool        empty() const;
   void        print_tree(std::ostream&) const;
   void        swap(Expression&);
+ private:
+  class Expression_Tree *topnode = nullptr;
 };
 
 /**
