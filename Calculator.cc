@@ -147,6 +147,10 @@ execute_command()
     ExpressionVector.erase(ExpressionVector.begin() + exprNum);
   }
   else if (command_ == 'R' && exprNum !=0){
+    if(ExpressionVector.size < exprNum){
+      cout << "Trying to delete, non-existing expression" << endl;
+      break;
+    }
     ExpressionVector.erase(ExpressionVector.begin()+exprNum-1);
     current_expression_.clear();
     if(ExpressionVector.size() > 0){

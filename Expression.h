@@ -37,10 +37,10 @@ class Expression
   ~Expression();
    
   Expression(const Expression&);	//Kopieringskonstruktor
-  Expression(const Expression&&); 	//Movesemantics
+  Expression(Expression&&); 	//Movesemantics
    
   Expression& operator=(const Expression&);	//Assignment operator
-  Expression& operator=(const Expression&&); //The 5th of the 5th that was missing.  <- Ska skrivas
+  Expression& operator=(Expression&&); //The 5th of the 5th that was missing.  <- Ska skrivas
    
   void 		  clear();
   long double evaluate(Variable_Table&) const;

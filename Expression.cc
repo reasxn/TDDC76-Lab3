@@ -48,7 +48,7 @@ Expression::Expression(const Expression& other){
  * Constructors
  */
 
-Expression::Expression(const Expression&& other){
+Expression::Expression(Expression&& other){
   swap(other);										//Modified, using swap instead
 }
 
