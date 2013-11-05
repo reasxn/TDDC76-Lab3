@@ -378,14 +378,24 @@ namespace
 		{
 		  throw expression_error( "felaktig postfix\n");
 		}
-	      Expression_Tree* rhs{tree_stack.top()};
+		  Expression_Tree* lhs = nullptr;
+		  Expression_Tree* rhs =nullptr;
+		  try{
+	      rhs = tree_stack.top();
+	      
 	      tree_stack.pop();
 
 	      if (tree_stack.empty()) 
 		{
 		  throw expression_error( "felaktig postfix\n");
 		}
-	      Expression_Tree* lhs{tree_stack.top()};
+		
+	      lhs = tree_stack.top();
+	      }
+	      catch(...){
+	      delete lhs;
+	      delete rhs;
+	      throw;}//HŠr 
 	      tree_stack.pop();
 
 	      if (token == "^")
@@ -451,7 +461,7 @@ namespace
       while(not(tree_stack.empty())){
 	tree_stack.pop();
       }
-      cout << "Error in Make_Expression_Tree, stack is cleared";
+      throw;
     }
 
 
