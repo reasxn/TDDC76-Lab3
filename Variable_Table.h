@@ -19,17 +19,17 @@
  */
 class Variable_Table
 {
-public:
- Variable_Table() = default;
- ~Variable_Table() = default;
- std::map<std::string,long double> VarTable;
- void insert(std::string,long double);
- void remove(std::string);
- bool find(const std::string) const;
- void set_value(std::string,long double);
- long double get_value(const std::string) const;
- void list(std::ostream&);
- void clear();
- bool empty() const;
- };  
+ public:
+  Variable_Table() = default;
+  ~Variable_Table() = default;
+  std::map<std::string,long double> VarTable;
+  void insert(std::string,long double);
+  void remove(std::string);
+  bool find(const std::string) const;
+  void set_value(std::string,long double);
+  long double get_value(const std::string) const;
+  void list(std::ostream&);
+  void clear();
+  bool empty() const;
+};  
 #endif

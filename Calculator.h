@@ -19,33 +19,33 @@
  */
 class Calculator
 {
-public:
-   Calculator() = default;
-   ~Calculator() = default;
+ public:
+  Calculator() = default;
+  ~Calculator() = default;
 
-   void run();
+  void run();
 
-private:
-	Variable_Table vtab; 
-   Calculator(const Calculator&) = delete;
-   Calculator& operator=(const Calculator&) = delete;
-   // Move-konstruktor och move-tilldelning genereras inte.
+ private:
+  Variable_Table vtab; 
+  Calculator(const Calculator&) = delete;
+  Calculator& operator=(const Calculator&) = delete;
+  // Move-konstruktor och move-tilldelning genereras inte.
 
-   static const std::string valid_cmds_;
+  static const std::string valid_cmds_;
 
-   Expression current_expression_;
-   std::vector<Expression> ExpressionVector;
-   char command_;
-   int exprNum;
+  Expression current_expression_;
+  std::vector<Expression> ExpressionVector;
+  char command_;
+  int exprNum;
    
 
-   static void print_help();
+  static void print_help();
 
-   void get_command();
-   bool valid_command() const;
-   void execute_command();
+  void get_command();
+  bool valid_command() const;
+  void execute_command();
 
-   void read_expression(std::istream&);
+  void read_expression(std::istream&);
 };
 
 #endif
