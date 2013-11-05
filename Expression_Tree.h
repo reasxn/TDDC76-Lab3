@@ -36,6 +36,7 @@ class Expression_Tree
 class Binary_Operator : public Expression_Tree
 {
  public:
+   Binary_Operator(Expression_Tree*,Expression_Tree*);
   ~Binary_Operator();
  protected:
   void print(std::ostream&) const;
