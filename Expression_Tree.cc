@@ -107,10 +107,6 @@ std::string Operand::get_infix() const {
   return str();
 }
 /*-----------Plus-------------*/
-Plus::Plus(Expression_Tree* l, Expression_Tree* r){
-  left = l; right = r;
-}
-
 Expression_Tree* Plus::clone() const{
 
   Expression_Tree* templeft = left->clone();
@@ -133,10 +129,6 @@ long double Plus::evaluate(Variable_Table& ptr) const{
 }
 
 /*-----------Minus-------------*/
-Minus::Minus(Expression_Tree* l, Expression_Tree* r){
-  left=l; right = r;
-}
-
 Expression_Tree* Minus::clone() const{
   Expression_Tree* templeft = left->clone();
   Expression_Tree* tempright = right->clone();
@@ -159,10 +151,6 @@ long double Minus::evaluate(Variable_Table& ptr) const{
 }
 
 /*-----------Times-------------*/
-Times::Times(Expression_Tree* l, Expression_Tree* r){
-  left=l; right = r;
-}
-
 Expression_Tree* Times::clone() const{
   Expression_Tree* templeft = left->clone();
   Expression_Tree* tempright = right->clone(); 
@@ -185,10 +173,6 @@ long double Times::evaluate(Variable_Table& ptr) const{
 
 
 /*-----------Divide------------*/
-Divide::Divide(Expression_Tree* l, Expression_Tree* r){
-  left=l; right = r;
-}
-
 Expression_Tree* Divide::clone() const{
   Expression_Tree* templeft = left->clone();
   Expression_Tree* tempright = right->clone(); 
@@ -213,10 +197,6 @@ long double Divide::evaluate(Variable_Table& ptr) const{
 }
 
 /*-----------Power-------------*/
-Power::Power(Expression_Tree* l, Expression_Tree* r){
-  left=l; right = r;
-}
-
 Expression_Tree* Power::clone() const{
   Expression_Tree* templeft = left->clone();
   Expression_Tree* tempright = right->clone(); 
@@ -255,16 +235,11 @@ Expression_Tree* Assign::clone() const{
   }
 }
 
-Assign::Assign(Expression_Tree* l, Expression_Tree* r){
+long double Assign::evaluate(Variable_Table& ptr) const {
   Variable* temp = dynamic_cast<Variable*>(l);
   if (not(temp)){
     throw expression_tree_error("No variable left of assign");
   }
-  left = temp;
-  right = r;
-}
-
-long double Assign::evaluate(Variable_Table& ptr) const {
   ptr.set_value(left->str(),right->evaluate(ptr)); 
   return ptr.get_value(left->str());
 }
