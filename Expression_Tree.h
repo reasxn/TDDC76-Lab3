@@ -38,13 +38,13 @@ class Binary_Operator : public Expression_Tree
  public:
    Binary_Operator(Expression_Tree*,Expression_Tree*);
   ~Binary_Operator();
- protected:
   void print(std::ostream&) const;
-  void printHelper(std::ostream&, int) const; 
-  Expression_Tree* left = nullptr;
-  Expression_Tree* right= nullptr;	
   std::string get_postfix() const;
   std::string get_infix() const;
+ protected:
+  Expression_Tree* left = nullptr;
+  Expression_Tree* right= nullptr;
+  void printHelper(std::ostream&, int) const; 
   std::string get_infixHelp(Expression_Tree*, Expression_Tree*) const;
 };
 
@@ -54,12 +54,12 @@ class Operand : public Expression_Tree
 {	
  public:
   ~Operand() = default;
- protected:
-  void printHelper(std::ostream&, int) const;
   void print(std::ostream&) const; 
   std::string get_postfix() const;
   std::string get_infix() const;
-};
+ protected:
+  void printHelper(std::ostream&, int) const;
+  };
 
 /*-----------Plus-------------*/
  
@@ -69,7 +69,6 @@ class Plus : public Binary_Operator
   std::string str() const;
   Plus(Expression_Tree* l,Expression_Tree* r);
   Expression_Tree* clone() const;
- private:
   long double evaluate(Variable_Table&) const;
 };
 
@@ -81,7 +80,6 @@ class Minus : public Binary_Operator
   Expression_Tree* clone() const;
   std::string str() const;
   Minus(Expression_Tree* l,Expression_Tree* r);
- private:
   long double evaluate(Variable_Table&) const;
 };
 
@@ -93,7 +91,6 @@ class Times : public Binary_Operator
   Expression_Tree* clone() const;
   std::string str() const;
   Times(Expression_Tree* l,Expression_Tree* r);
- private:
   long double evaluate(Variable_Table&) const;
 };
 
@@ -106,7 +103,6 @@ class Divide : public Binary_Operator
   Expression_Tree* clone() const;
   std::string str() const;
   Divide(Expression_Tree* l,Expression_Tree* r);
- private:
   long double evaluate(Variable_Table&) const;
 
 };
@@ -119,7 +115,6 @@ class Power: public Binary_Operator
   Expression_Tree* clone() const;
   std::string str() const;
   Power(Expression_Tree* l,Expression_Tree* r);
- private:
   long double evaluate(Variable_Table&) const;
 };
 
@@ -127,11 +122,10 @@ class Power: public Binary_Operator
 
 class Assign: public Binary_Operator
 {
- private:
+ public:
   Expression_Tree* clone() const;
   std::string str() const;
   long double evaluate(Variable_Table&) const;
- public:
   Assign(Expression_Tree* l, Expression_Tree* r);
 };
 
@@ -139,10 +133,9 @@ class Assign: public Binary_Operator
 
 class Integer : public Operand
 {
- private:
+ public:
   Expression_Tree* clone() const;
   long long int value = 0;
- public:
   std::string str() const;
   Integer(long long int);
   long double evaluate(Variable_Table&) const;
@@ -151,8 +144,8 @@ class Integer : public Operand
 /*-----------Real--------------*/
 
 class Real : public Operand{
-  long double value;
  public:
+  long double value;
   Expression_Tree* clone() const;
   std::string str() const;
   Real(long double temp);
@@ -163,10 +156,9 @@ class Real : public Operand{
 
 class Variable : public Operand
 {
- private:
+ public:
   std::string name;
   long double evaluate(Variable_Table&) const;
- public:
   std::string str() const;
   long double value;
   Expression_Tree* clone() const;
