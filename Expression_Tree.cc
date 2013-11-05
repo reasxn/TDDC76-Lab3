@@ -14,6 +14,11 @@ using namespace std;
 
 
 /*------Binary Operator--------*/
+Binary_Operator::Binary_Operator(Expression_Tree* lhs, Expression_Tree* rhs){
+	left = lhs;
+	right = rhs;
+	}
+
 Binary_Operator::~Binary_Operator(){
   delete left;
   delete right;
