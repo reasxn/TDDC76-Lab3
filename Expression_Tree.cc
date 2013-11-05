@@ -236,7 +236,7 @@ Expression_Tree* Assign::clone() const{
 }
 
 long double Assign::evaluate(Variable_Table& ptr) const {
-  Variable* temp = dynamic_cast<Variable*>(l);
+  Variable* temp = dynamic_cast<Variable*>(left);
   if (not(temp)){
     throw expression_tree_error("No variable left of assign");
   }
