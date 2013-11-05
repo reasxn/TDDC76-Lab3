@@ -36,7 +36,7 @@ class Calculator
   Expression current_expression_;
   std::vector<Expression> ExpressionVector;
   char command_;
-  int exprNum;
+  unsigned int exprNum;
    
 
   static void print_help();
