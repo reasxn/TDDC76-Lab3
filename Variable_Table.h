@@ -17,6 +17,18 @@
  * en destruktor, kopieringskonstruktor eller kopieringstilldelnings-
  * operator deklareras.
  */
+ 
+ class vt_error:public std::logic_error
+{
+ public:
+  explicit vt_error(const std::string& what_arg) noexcept
+    : std::logic_error{what_arg} {}
+	
+  explicit vt_error(const char* what_arg) noexcept
+    : std::logic_error{what_arg} {}
+};
+
+ 
 class Variable_Table
 {
  public:

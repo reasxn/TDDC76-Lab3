@@ -7,6 +7,9 @@
 using namespace std;
 
 void Variable_Table::insert(std::string name,long double value){
+  if(find(name)){
+  	throw vt_error("Trying to insert, when variable already exists");
+  }
   VarTable.insert(pair<string,long double>(name,value));
 }
 
@@ -24,16 +27,16 @@ bool Variable_Table::find(string name) const{
 void Variable_Table::set_value(string name,long double value){
   if(find(name)){
     VarTable.at(name) = value;
+    return;
   }
-  insert(name,value);
-}
+  throw vt_error("Trying to set a variable that does not exist");
+  }
 
 long double Variable_Table::get_value(string name) const{
   if(find(name)){
     return VarTable.at(name);
   }
-  cout << "Variable not found, 0 is used" << endl; 
-  return 0;
+  throw vt_error("Variable not found");
 }
 
 void Variable_Table::list(ostream& os){
