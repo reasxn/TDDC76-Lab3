@@ -24,42 +24,32 @@ Binary_Operator::~Binary_Operator(){
   delete right;
 }
 
-//Helps decide where to put the parentheses
-std::string Binary_Operator::get_infixHelp(Expression_Tree* left,Expression_Tree* right) const{
-  std::string tempLeft, tempRight;
+std::string Binary_Operator::get_infixHelp(bool paranthesis) const{
+	string expression = left->get_infixHelp(priorityCheck(left)) + " " + this->str() + 
+	" " + right->get_infixHelp(priorityCheck(right));
 	
-  tempLeft = left->get_infix();
-  tempRight = right->get_infix();
-  Expression_Tree* temp = this->clone();
-  if(dynamic_cast<Times*>(temp) || (dynamic_cast<Divide*>(temp))
-     || (dynamic_cast<Power*>(temp))) {
-    if(not(dynamic_cast<Operand*>(left))) {
-      tempLeft =  "(" + left->get_infix() + ")";
-    }
-    else{
-      tempLeft =  left->get_infix();
-    }
-  }
-  if(not(dynamic_cast<Operand*>( right))) {
-    tempRight = "(" +  right->get_infix() + ")";
-  }
-  else{
-    tempRight =  right->get_infix();
-  }
-  if(dynamic_cast<Minus*>(temp)) {
-    tempLeft =  left->get_infix();
-    if(not(dynamic_cast<Operand*>( right))) {
-      tempRight = "(" +  right->get_infix() + ")";
-    }
-    else{
-      tempRight =  right->get_infix();
-    }
-  }
-  if(dynamic_cast<Assign*>(temp)) {
-    tempLeft =  left->get_infix();
-    tempRight =  right->get_infix();
-  }
-  return tempLeft +  str() + tempRight;
+	if(paranthesis){
+		return "(" + expression + ")";
+	}
+	return expression;
+}
+
+bool Binary_Operator::priorityCheck(Expression_Tree* ptr) const {
+	/* Minus is somewhat of a special case, this solution gives some redundant paranthesis
+	but ensures mathematical correctness. 
+	*/
+	if(this->str() == "-"){ 
+	if(this->priority() >= ptr->priority()){ 
+	
+		return true;
+	}
+	return false;
+	}
+	if(this->priority() > ptr->priority()){
+		return true;
+	}
+	return false;
+	
 }
 	
 void Binary_Operator::printHelper(std::ostream& os,int offset) const{
@@ -85,10 +75,18 @@ std::string Binary_Operator::get_postfix() const{
 }
 
 std::string Binary_Operator::get_infix() const{
-  return this->get_infixHelp(this->left,this->right);
+  return this->get_infixHelp(false);
 }
 
 /*----------Operand-----------*/
+
+std::string Operand::get_infixHelp(bool) const{
+return str();
+}
+
+unsigned int Operand::priority() const{
+return 0;
+}
 
 void Operand::printHelper(std::ostream& os,int offset) const{ //Helps adjust the print
   offset += str().size();
@@ -107,11 +105,18 @@ std::string Operand::get_infix() const {
   return str();
 }
 /*-----------Plus-------------*/
+
+unsigned int Plus::priority() const{
+return 0;
+}
+
 Expression_Tree* Plus::clone() const{
 
-  Expression_Tree* templeft = left->clone();
-  Expression_Tree* tempright = right->clone(); 
+  Expression_Tree* templeft = nullptr;
+  Expression_Tree* tempright =  nullptr; 
   try{
+  	Expression_Tree* templeft = left->clone();
+  	Expression_Tree* tempright = right->clone(); 
     return new Plus{templeft,tempright};} //To avoid memory problems
   catch(...){
     delete templeft;
@@ -129,10 +134,17 @@ long double Plus::evaluate(Variable_Table& ptr) const{
 }
 
 /*-----------Minus-------------*/
+
+unsigned int Minus::priority() const{
+return 1;
+}
+
 Expression_Tree* Minus::clone() const{
-  Expression_Tree* templeft = left->clone();
-  Expression_Tree* tempright = right->clone();
-  try{ 
+  Expression_Tree* templeft = nullptr;
+  Expression_Tree* tempright =  nullptr; 
+  try{
+  	Expression_Tree* templeft = left->clone();
+  	Expression_Tree* tempright = right->clone(); 
     return new Minus{templeft,tempright};} 
   catch(...){
     delete templeft;
@@ -151,10 +163,18 @@ long double Minus::evaluate(Variable_Table& ptr) const{
 }
 
 /*-----------Times-------------*/
+
+unsigned int Times::priority() const{
+return 2;
+}
+
+
 Expression_Tree* Times::clone() const{
-  Expression_Tree* templeft = left->clone();
-  Expression_Tree* tempright = right->clone(); 
+  Expression_Tree* templeft = nullptr;
+  Expression_Tree* tempright =  nullptr; 
   try{
+  	Expression_Tree* templeft = left->clone();
+  	Expression_Tree* tempright = right->clone(); 
     return new Times{templeft,tempright};}
   catch(...){
     delete templeft;
@@ -173,10 +193,17 @@ long double Times::evaluate(Variable_Table& ptr) const{
 
 
 /*-----------Divide------------*/
+
+unsigned int Divide::priority() const{
+return 2;
+}
+
 Expression_Tree* Divide::clone() const{
-  Expression_Tree* templeft = left->clone();
-  Expression_Tree* tempright = right->clone(); 
+  Expression_Tree* templeft = nullptr;
+  Expression_Tree* tempright =  nullptr; 
   try{
+  	Expression_Tree* templeft = left->clone();
+  	Expression_Tree* tempright = right->clone(); 
     return new Divide{templeft,tempright};}
   catch(...){
     delete templeft;
@@ -197,10 +224,17 @@ long double Divide::evaluate(Variable_Table& ptr) const{
 }
 
 /*-----------Power-------------*/
+
+unsigned int Power::priority() const{
+return 3;
+}
+
 Expression_Tree* Power::clone() const{
-  Expression_Tree* templeft = left->clone();
-  Expression_Tree* tempright = right->clone(); 
+  Expression_Tree* templeft = nullptr;
+  Expression_Tree* tempright =  nullptr; 
   try{
+  	Expression_Tree* templeft = left->clone();
+  	Expression_Tree* tempright = right->clone(); 
     return new Power{templeft,tempright};}
   catch(...){
     delete templeft;
@@ -214,19 +248,30 @@ string Power::str() const{
 }
 
 long double Power::evaluate(Variable_Table& ptr) const{
-  return pow(left->evaluate(ptr),right->evaluate(ptr));
+  long double leftEval = left->evaluate(ptr);
+  long double rightEval = right->evaluate(ptr);
+  if(leftEval < 0 && floor(rightEval) != rightEval){
+  throw expression_tree_error("Negative number raised by non-integer.");
+  }
+  return pow(leftEval,rightEval);
 }
 
 /*-----------Assign------------*/
+
+unsigned int Assign::priority() const{
+return 0;
+}
 
 string Assign::str() const{
   return "="; 
 }
 
 Expression_Tree* Assign::clone() const{
-  Expression_Tree* templeft = left->clone();
-  Expression_Tree* tempright = right->clone();
-  try{ 
+  Expression_Tree* templeft = nullptr;
+  Expression_Tree* tempright =  nullptr; 
+  try{
+  	Expression_Tree* templeft = left->clone();
+  	Expression_Tree* tempright = right->clone(); 
     return new Assign{templeft,tempright};}
   catch(...){
     delete templeft;
@@ -240,19 +285,14 @@ long double Assign::evaluate(Variable_Table& ptr) const {
   if (not(temp)){
     throw expression_tree_error("No variable left of assign");
   }
-  ptr.set_value(left->str(),right->evaluate(ptr)); 
-  return ptr.get_value(left->str());
+  temp->set_value(right->evaluate(ptr),ptr);
+  return temp->get_value(ptr);
 }
 
 /*-----------Integer-----------*/
 
 Expression_Tree* Integer::clone() const{
-  try{
     return new Integer{value};
-  }
-  catch(...){
-    throw;
-  }
 }
 
 Integer::Integer(long long int temp){
@@ -269,12 +309,7 @@ long double Integer::evaluate(Variable_Table&) const {
 
 /*-----------Real--------------*/
 Expression_Tree* Real::clone() const{
-  try{
-    return new Real{value};
-  }
-  catch(...){
-    throw;
-  }
+ return new Real{value};
 }
 
 Real::Real(long double temp){
@@ -292,24 +327,24 @@ long double Real::evaluate(Variable_Table&) const{
 /*-----------Variable-----------*/
 
 Expression_Tree* Variable::clone() const{
-  try{
-    return new Variable{name};
-  }
-  catch(...){
-    throw;
-  }
+  return new Variable{name};  
 }
 
 long double Variable::evaluate(Variable_Table& ptr) const {
   return ptr.get_value(this->str());
 }
 
-long double Variable::get_value() const{
-  return value;
+long double Variable::get_value(Variable_Table& ptr) const{
+  return ptr.get_value(this->str());
 }
 
-void Variable::set_value(const long double& inputValue){
-  value=inputValue;
+void Variable::set_value(const long double& inputValue,Variable_Table& ptr){
+ if(ptr.find(this->str())){
+ ptr.set_value(this->str(),inputValue);
+ return;
+ }
+ ptr.insert(this->str(),inputValue);
+ return;
 }
 
 string Variable::str() const{
