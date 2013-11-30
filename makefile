@@ -6,7 +6,8 @@ CCC = gccfilter -c -a g++
 CCFLAGS += -std=c++11 -Wpedantic -Wall -Wextra -Werror
 
 # L‰nkflaggor - Fix fˆr att lˆsa lokala problem med C++ l‰nkbibliotek.
-LDFLAGS  += -L/sw/gcc-$(GCC4_V)/lib -static-libstdc++
+LDFLAGS  +=
+# -L/sw/gcc-$(GCC4_V)/lib -static-libstdc++
 
 # Objektkodsmoduler som ingÂr i den kompletta kalkylatorn.
 OBJECTS = Calculator.o kalkylator.o Expression.o Expression_Tree.o Variable_Table.o

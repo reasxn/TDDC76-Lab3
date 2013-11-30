@@ -38,7 +38,7 @@ class Expression_Tree
 class Binary_Operator : public Expression_Tree
 {
  public:
-   Binary_Operator(Expression_Tree*,Expression_Tree*);
+  Binary_Operator(Expression_Tree*,Expression_Tree*);
   ~Binary_Operator();
   void print(std::ostream&) const;
   std::string get_postfix() const;
@@ -49,7 +49,7 @@ class Binary_Operator : public Expression_Tree
   void printHelper(std::ostream&, int) const; 
   std::string get_infixHelp(bool) const;
   bool priorityCheck(Expression_Tree*) const;
-  };
+};
 
 /*----------Operand-----------*/
  
@@ -64,7 +64,7 @@ class Operand : public Expression_Tree
   std::string get_infixHelp(bool) const;
   unsigned int priority() const;
   void printHelper(std::ostream&, int) const;
-  };
+};
 
 /*-----------Plus-------------*/
  
@@ -73,7 +73,7 @@ class Plus : public Binary_Operator
  public:
   unsigned int priority() const;
   std::string str() const;
-  Plus(Expression_Tree* l,Expression_Tree* r):Binary_Operator(l,r){};
+ Plus(Expression_Tree* l,Expression_Tree* r):Binary_Operator(l,r){};
   Expression_Tree* clone() const;
   long double evaluate(Variable_Table&) const;
 };
@@ -86,7 +86,7 @@ class Minus : public Binary_Operator
   unsigned int priority() const;
   Expression_Tree* clone() const;
   std::string str() const;
-  Minus(Expression_Tree* l,Expression_Tree* r):Binary_Operator(l,r){};
+ Minus(Expression_Tree* l,Expression_Tree* r):Binary_Operator(l,r){};
   long double evaluate(Variable_Table&) const;
 };
 
@@ -98,7 +98,7 @@ class Times : public Binary_Operator
   unsigned int priority() const;
   Expression_Tree* clone() const;
   std::string str() const;
-  Times(Expression_Tree* l,Expression_Tree* r):Binary_Operator(l,r){};
+ Times(Expression_Tree* l,Expression_Tree* r):Binary_Operator(l,r){};
   long double evaluate(Variable_Table&) const;
 };
 
@@ -111,7 +111,7 @@ class Divide : public Binary_Operator
   unsigned int priority() const;
   Expression_Tree* clone() const;
   std::string str() const;
-  Divide(Expression_Tree* l,Expression_Tree* r):Binary_Operator(l,r){};
+ Divide(Expression_Tree* l,Expression_Tree* r):Binary_Operator(l,r){};
   long double evaluate(Variable_Table&) const;
 
 };
@@ -124,7 +124,7 @@ class Power: public Binary_Operator
   unsigned int priority() const;
   Expression_Tree* clone() const;
   std::string str() const;
-  Power(Expression_Tree* l,Expression_Tree* r):Binary_Operator(l,r){};
+ Power(Expression_Tree* l,Expression_Tree* r):Binary_Operator(l,r){};
   long double evaluate(Variable_Table&) const;
 };
 
@@ -137,7 +137,7 @@ class Assign: public Binary_Operator
   Expression_Tree* clone() const;
   std::string str() const;
   long double evaluate(Variable_Table&) const;
-  Assign(Expression_Tree* l, Expression_Tree* r):Binary_Operator(l,r){};
+ Assign(Expression_Tree* l, Expression_Tree* r):Binary_Operator(l,r){};
 };
 
 /*-----------Integer-----------*/

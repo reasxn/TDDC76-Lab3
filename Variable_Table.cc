@@ -8,7 +8,7 @@ using namespace std;
 
 void Variable_Table::insert(std::string name,long double value){
   if(find(name)){
-  	throw vt_error("Trying to insert, when variable already exists");
+    throw vt_error("Trying to insert, when variable already exists");
   }
   VarTable.insert(pair<string,long double>(name,value));
 }
@@ -30,7 +30,7 @@ void Variable_Table::set_value(string name,long double value){
     return;
   }
   throw vt_error("Trying to set a variable that does not exist");
-  }
+}
 
 long double Variable_Table::get_value(string name) const{
   if(find(name)){

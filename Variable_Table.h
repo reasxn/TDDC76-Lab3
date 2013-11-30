@@ -18,7 +18,7 @@
  * operator deklareras.
  */
  
- class vt_error:public std::logic_error
+class vt_error:public std::logic_error
 {
  public:
   explicit vt_error(const std::string& what_arg) noexcept
